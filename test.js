@@ -7,10 +7,18 @@ async function main() {
   //console.log(await getDeviceList())
   const list = await detectDebugProbes()
   for(const e of list.probes) {
-    console.log(e)
     const device = await detectDevice(e.id)
-    console.log(device)
+    //console.log(device)
     identifyProbe(e.id)
+    
+    const { serialNumber, comPorts, connectionXml} = e
+
+    const ret = Object.assign({
+      serialNumber,
+      comPorts,
+      connectionXml
+    }, device)
+    console.log(ret)
   }
 }
 
