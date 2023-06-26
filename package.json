@@ -1,0 +1,15 @@
+{
+  "name": "detect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jan Bölsche <jan@lagomorph.de> (https://regular.codes/)",
+  "license": "ISC",
+  "dependencies": {
+    "serialport": "^11.0.0",
+    "usb": "^2.9.0"
+  }
+}
