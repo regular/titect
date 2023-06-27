@@ -1,4 +1,4 @@
-const boardIdInfo = require("./board_ids.json")
+const boardIdInfo = require('/opt/ti/uniflash/TICloudAgentHostApp/src/targetDetection/board_ids.json')
 
 module.exports = function(log) {
 
@@ -8,7 +8,7 @@ module.exports = function(log) {
   }
 
   async function detectDevice (device, _options) {
-    const boardId = await readBoardId(device.usbDevice)
+    const boardId = await readBoardId(device)
     return decodeBoardId(boardId)
   }
   async function readBoardId(device) {
