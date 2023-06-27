@@ -5,8 +5,10 @@ const makeCCXML = require('./make-ccxml')
 const {missingFiles} = require('./target-db')
 const Blink = require('./blink')
 
-const log = ()=>{}
-//const log = console.log
+let log = ()=>{}
+if (conf.verbose) {
+  log = console.log
+}
 const {getUSBDeviceList, detectDebugProbe, detectDevice} = Detect({log})
 const blink = Blink({log})
 
@@ -63,7 +65,7 @@ async function main() {
       })
     }
   } catch(err) {
-    console.error(err.message)
+    console.error(err.stack)
     process.exit(1)
   }
 }

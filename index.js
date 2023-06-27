@@ -2,7 +2,7 @@ const usb = require("usb")
 const BoardId = require('./board_id')
 
 // This is a map of vid, pid -> connection xml file
-const tiDebugProbes = require("./targetDetection/debug_probes.json").reduce((result, entry) => {
+const tiDebugProbes = require("/opt/ti/uniflash/TICloudAgentHostApp/src/targetDetection/debug_probes.json").reduce((result, entry) => {
   result[entry.vid + "_" + entry.pid] = entry
   return result
 }, {})

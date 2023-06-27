@@ -1,16 +1,21 @@
 const BoardId = require("./board_id");
-const SerialId = require("./serial_id")
+const Com = require("./com")
 
 module.exports = function(opts) {
   opts = opts || {}
   const log = opts.log || ( ()=>{} )
-  const {readBoardId} = BoardId(log)
-  const {findComPorts} = SerialId(opts)
+  const {getDescriptor} = BoardId(log)
+  const {findComPorts} = Com(opts)
 
   return function detectDebugProbe(device) {
     log('xds110: detectDebugProbe')
 
-    return readBoardId(device).then(serialNumber => {
+    return new Promise( (resolve, reject)=>{
+      getDescriptor(device, (err, result)=>{
+        if (err) return reject(err)
+        resolve(result)
+      })
+    }).then(serialNumber => {
       log('serial number:', serialNumber)
       return findComPorts(serialNumber).then(comPorts=> {
         const ret = {
