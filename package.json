@@ -9,7 +9,10 @@
   "author": "Jan Bölsche <jan@lagomorph.de> (https://regular.codes/)",
   "license": "ISC",
   "dependencies": {
+    "rc": "^1.2.8",
     "serialport": "^11.0.0",
-    "usb": "^2.9.0"
+    "tmp-promise": "^3.0.3",
+    "usb": "^2.9.0",
+    "xml-flow": "^1.0.4"
   }
 }

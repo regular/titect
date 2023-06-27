@@ -14,9 +14,6 @@ module.exports = function detector(opts) {
     // removed msp430_id
     ['board_id'].map(v=>[v, require(`./targetDetection/${v}`)(log).detectDevice])
   )
-  const probeIdentifyAlgorithms = {
-    identifyXds110: require("./probeIdentify/xds110")(opts)
-  }
   const probeDetectionAlgorithms = Object.fromEntries(
     // removed msp_fet
     'xds100 xds110'.split(' ').map(v=>[v, require(`./targetDetection/${v}`)(opts)])
@@ -45,8 +42,7 @@ module.exports = function detector(opts) {
   return {
     getDeviceList,
     detectDebugProbes,
-    detectDevice, // very simplistic baes on first 4 digits of serial number
-    identifyProbe // spawning DSLite binary!
+    detectDevice // very simplistic baes on first 4 digits of serial number
   }
 
   function detectDebugProbe(probeId) {
@@ -102,20 +98,6 @@ module.exports = function detector(opts) {
   function detectDeviceWithProbe(probe) {
     if (!probe.id) return Promise.resolve({ name: undefined })
     return detectDevice(probe.id)
-  }
-  function identifyProbe(probeId) {
-    const device = attachedProbes[probeId]
-    if (!device) throw new Error("Unknown debug probe id: " + probeId);
-    
-    return detectDebugProbe(probeId).then( probe => {
-      const probeIdentify = tiDebugProbes[getKey(device.usbDevice)].probeIdentify
-      if (!probeIdentify || !probe) return Promise.resolve({})
-      /*
-      return this._downloadCategories(probeIdentify)
-        .then(() => this.probeIdentifyAlgorithms[probeIdentify.algorithm](probe));
-      */
-      return probeIdentifyAlgorithms[probeIdentify.algorithm](probe)
-    })
   }
   function filesNeeded() {
     const categories = [] // getCategoriesOfAttachedDevices()
