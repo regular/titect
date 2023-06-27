@@ -7,14 +7,19 @@ const Blink = require('./blink')
 
 const log = ()=>{}
 //const log = console.log
-const {getDeviceList, detectDebugProbes, detectDevice, identifyProbe} = Detect({log})
+const {getUSBDeviceList, detectDebugProbe, detectDevice} = Detect({log})
 const blink = Blink({log})
 
 async function detect() {
-  //console.log(await getDeviceList())
-  const {probes} = await detectDebugProbes()
+  const probes = await Promise.all(
+    getUSBDeviceList().map(usbdevice=>{
+      return detectDebugProbe(usbdevice).then(o=>{
+        return Object.assign(o, {usbdevice})
+      })
+    })
+  )
   return Promise.all(probes.map( async probe => {
-    const device = await detectDevice(probe.id)
+    const device = await detectDevice(probe.usbdevice)
     
     const { serialNumber, comPorts, connectionXml} = probe
 
