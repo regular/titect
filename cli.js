@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const fs = require('fs')
 const conf = require('rc')('titect')
 const Detect = require('.')
