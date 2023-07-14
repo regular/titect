@@ -13,8 +13,10 @@
   "license": "ISC",
   "dependencies": {
     "dont-stop-believing": "^1.0.0",
+    "dslite-run-fw": "github:regular/dslite-run-fw",
     "rc": "^1.2.8",
     "serialport": "^11.0.0",
+    "tifw": "github:regular/tifw",
     "tmp-promise": "^3.0.3",
     "usb": "^2.9.0",
     "xml-flow": "^1.0.4"

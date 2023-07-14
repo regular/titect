@@ -5,6 +5,7 @@ const Detect = require('.')
 const makeCCXML = require('./make-ccxml')
 const {missingFiles} = require('./target-db')
 const Blink = require('./blink')
+const queryDevice = require('./query-device')
 
 let log = ()=>{}
 if (conf.verbose) {
@@ -25,17 +26,22 @@ async function detect() {
     const device = await detectDevice(probe.usbdevice)
     
     const { serialNumber, comPorts, connectionXml} = probe
+    const queryResult = await queryDevice({serialNumber, connectionXml, deviceXml:  device.deviceXml})
 
     if (!device.deviceXml) {
-      console.error(`WARN: Failed to detect MCU of ${serialNumber}, using default.`)
-      device.deviceXml = 'cc2640r2f'
+      if (!queryResult.device) {
+        console.error(`WARN: Failed to detect MCU of ${serialNumber}, using default.`)
+        device.deviceXml = 'cc2640r2f'
+      } else {
+        device.deviceXml = queryResult.device
+      }
     }
 
     return Object.assign({
       serialNumber,
       comPorts,
       connectionXml
-    }, device)
+    }, (queryResult || {}), device)
     
   }))
 }
