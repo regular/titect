@@ -29,11 +29,11 @@ async function detect() {
     const queryResult = await queryDevice({serialNumber, connectionXml, deviceXml:  device.deviceXml})
 
     if (!device.deviceXml) {
-      if (!queryResult.device) {
+      if (!queryResult.deviceXml) {
         console.error(`WARN: Failed to detect MCU of ${serialNumber}, using default.`)
         device.deviceXml = 'cc2640r2f'
       } else {
-        device.deviceXml = queryResult.device
+        device.deviceXml = queryResult.deviceXml
       }
     }
 
@@ -52,8 +52,9 @@ async function main() {
     if (conf.json) {
       console.log(JSON.stringify(list, null, 2))
     } else {
-      list.sort(sortf).forEach( ({connectionXml, deviceXml, serialNumber, comPorts})=>{
-        console.log(`#${serialNumber} (${(deviceXml || '???').toUpperCase()}) via ${connectionXml} on ${(comPorts || []).join(' ')}`)
+      list.sort(sortf).forEach( ({connectionXml, deviceXml, serialNumber, comPorts, output})=>{
+        const details = output || `(${(deviceXml || '???').toUpperCase()})`
+        console.log(`#${serialNumber} ${details} via ${connectionXml} on ${(comPorts || []).join(' ')}`)
       })
     }
     if (conf.blink) {
