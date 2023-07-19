@@ -2,7 +2,7 @@ const fs = require('fs')
 const {writeFile} = require('fs/promises')
 const {join} = require('path')
 const tmp = require('tmp-promise')
-const makeFirmware = require('tifw')
+const makeFirmware = require('tiffy')
 const {runImage, startDSLite} = require('dslite-run-fw')
 const makeCCXML = require('./make-ccxml')
 
@@ -18,7 +18,6 @@ module.exports = async function queryDevice({serialNumber, connectionXml, device
   const output = await tmp.withFile(async file => {
     await writeFile(file.path, ccxml, 'utf8')
     const output = await run(file.path, firmware.path)
-    console.log('output', output)
     return output
   })
   return {output}
@@ -31,11 +30,13 @@ async function run(ccxml, firmware) {
     port
   }, {log: null})
   try {
-    return await runImage(ccxml, firmware, proxy.port, {
+    const output = await runImage(ccxml, firmware, proxy.port, {
       log: null,
       numLines: 1,
       input: 'A'
     })
+    console.log('output', output)
+    return output
   }  finally {
     proxy.stop()
   }
